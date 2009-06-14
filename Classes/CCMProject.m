@@ -3,6 +3,7 @@
 #import "NSCalendarDate+CCMAdditions.h"
 
 
+NSString *CCMPendingStatus = @"Pending";
 NSString *CCMSuccessStatus = @"Success";
 NSString *CCMFailedStatus = @"Failure";
 
@@ -72,9 +73,19 @@ static NSSet *infoKeys;
 	return name;
 }
 
+- (BOOL)isPending
+{
+	return [[self lastBuildStatus] isEqualToString:CCMPendingStatus];
+}
+
+- (BOOL)isSuccess
+{
+	return [[self lastBuildStatus] isEqualToString:CCMSuccessStatus];
+}
+
 - (BOOL)isFailed
 {
-	return ([self lastBuildStatus] != nil) && ![[self lastBuildStatus] isEqualToString:CCMSuccessStatus];
+	return ([self lastBuildStatus] != nil) && !([self isSuccess] || [self isPending]);
 }
 
 - (BOOL)isBuilding
